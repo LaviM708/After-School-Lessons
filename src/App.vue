@@ -1,26 +1,47 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <navbar
+        :pages="pages"
+        :active-page="activePage"
+        :nav-link-click="(index) => activePage = index"
+        ></navbar>
+
+    <LessonList 
+        :page="pages[activePage]"
+        ></LessonList>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Navbar from './components/Navbar.vue';
+import LessonList from './components/LessonList.vue';
+
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
+    Navbar,
+    LessonList
+  },
+    data() {
+      return { //inside is reactive data
+          activePage: 0, //index 0 which is Lessons List 
+          pages: [
+             {
+                link: {text: 'Lessons', url: 'LessonList.html'},
+                pageTitle: 'Lessons List',
+                content: 'This is the list of lessons'
+              },
+              {
+                link: {text: 'About', url: 'about.html'},
+                pageTitle: 'About',
+                content: 'This is the about content'
+              },
+              {
+                link: {text: 'Checkout', url: 'checkout.html'},
+                pageTitle: 'Checkout',
+                content: 'This is the Checkout'
+              }
+          ]
+      };
+    }    
 }
-</script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+</script>
