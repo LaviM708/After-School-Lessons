@@ -69,8 +69,13 @@ export default {
     },
     methods: {
       addToCart(lesson) {
-        this.cart.push(lesson);
-        console.log('Cart now has', this.cart.length, 'item(s):', this.cart);
+        if(lesson.spaces > 0) {
+          this.cart.push(lesson);
+          lesson.spaces = lesson.spaces - 1;
+          console.log(`Added ${lesson.subject}. Spaces left: ${lesson.spaces}`);
+        } else {
+          alert("Sorry, this lesson is full");
+        }
       }
     }    
 }
