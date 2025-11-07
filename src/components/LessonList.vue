@@ -45,6 +45,7 @@
             <button 
                 class="btn btn-primary w-100"
                 @click="addToCart(lesson)"
+                :disabled="lesson.spaces === 0"
             >
               Add to Cart
             </button>

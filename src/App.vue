@@ -5,6 +5,7 @@
       :pages="pages"
       :active-page="activePage"
       :nav-link-click="(index) => activePage = index"
+      :cart="cart"
     ></navbar>
 
     <!-- Layout row -->
@@ -60,7 +61,7 @@ export default {
                 content: 'This is the about content'
               },
               {
-                link: {text: 'Checkout', url: 'Cart.vue'},
+                link: {text: 'Checkout', url: 'Checkout.vue'},
                 pageTitle: 'Checkout',
                 content: 'This is the Checkout'
               }
