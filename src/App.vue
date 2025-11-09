@@ -6,26 +6,21 @@
       :active-page="activePage"
       :nav-link-click="(index) => activePage = index"
       :cart="cart"
+      @toggle-checkout="toggleCheckout" 
     ></navbar>
-
-    <!-- Layout row -->
+      
     <div class="container mt-4">
       <div class="row">
-        <!-- 📚 Left side: Lessons -->
-        <div class="col-md-8">
+        <!-- Lessons always visible -->
+        <div :class="showCartPage ? 'col-md-8' : 'col-12'">
           <LessonList
             :page="pages[activePage]"
             :add-to-cart="addToCart"
           />
         </div>
-
-        <!-- 🛒 Right side: Cart -->
-        <div class="col-md-4">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <Cart :cart="cart" />
-            </div>
-          </div>
+        <!-- Show cart page when showCartPage is true -->
+        <div v-if="showCartPage" class="col-md-4">
+            <Cart :cart="cart" />
         </div>
       </div>
     </div>
@@ -48,6 +43,7 @@ export default {
     data() {
       return { //inside is reactive data
           activePage: 0, //index 0 which is Lessons List 
+          showCartPage: false,
           cart: [], //cart array 
           pages: [
              {
@@ -77,6 +73,9 @@ export default {
         } else {
           alert("Sorry, this lesson is full");
         }
+      },
+      toggleCheckout() {
+        this.showCartPage = !this.showCartPage;
       }
     }    
 }
