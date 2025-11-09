@@ -24,6 +24,9 @@
               :cart="cart"
               @remove-item="removeFromCart"
             />
+
+            <!-- Checkout Form -->
+            <Checkout :cart="cart" />
         </div>
       </div>
     </div>
@@ -35,13 +38,15 @@
 import Navbar from './components/Navbar.vue';
 import LessonList from './components/LessonList.vue';
 import Cart from './components/Cart.vue';
+import Checkout from './components/Checkout.vue';
 
 
 export default {
   components: {
     Navbar,
     LessonList,
-    Cart
+    Cart,
+    Checkout
   },
     data() {
       return { //inside is reactive data
