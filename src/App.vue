@@ -20,7 +20,10 @@
         </div>
         <!-- Show cart page when showCartPage is true -->
         <div v-if="showCartPage" class="col-md-4">
-            <Cart :cart="cart" />
+            <Cart 
+              :cart="cart"
+              @remove-item="removeFromCart"
+            />
         </div>
       </div>
     </div>
@@ -76,6 +79,16 @@ export default {
       },
       toggleCheckout() {
         this.showCartPage = !this.showCartPage;
+      },
+      removeFromCart(index) {
+        const lesson = this.cart[index];
+
+        if(lesson) {
+          lesson.spaces = lesson.spaces+1;
+          this.cart.splice(index, 1);
+
+          console.log(`Removed ${lesson.subject}. Spaces now: ${lesson.spaces}`);
+        }
       }
     }    
 }

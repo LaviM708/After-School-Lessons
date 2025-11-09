@@ -16,10 +16,19 @@
         <div>
           <strong>{{ item.subject }}</strong>
           <div class="small text-muted">
-            {{ item.location }}
+            {{ item.location }} 
           </div>
         </div>
-        <span>£{{ item.price }}</span>
+
+        <div class="d-flex align-items-center gap-2">
+            <span>£{{ item.price }}</span>
+            <button 
+                class="btn btn-sm btn-outline-danger"
+                @click="$emit('remove-item', index)"
+            >
+                Remove
+            </button>
+        </div>
       </li>
 
       <!-- Total row -->
@@ -35,6 +44,7 @@
 export default {
   name: 'Cart',
   props: ['cart'],
+  emites: ['remove-item'],
   computed: {
     cartTotal() {
       // add up all prices in the cart
