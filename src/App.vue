@@ -27,7 +27,7 @@
 
             <!-- Checkout Form -->
             <Checkout :cart="cart"
-              @checkout="handleCheckout"
+              @checkout="completeCheckout"
             />
         </div>
       </div>
@@ -51,7 +51,7 @@ export default {
     Checkout
   },
     data() {
-      return { //inside is reactive data
+      return { 
           activePage: 0, //index 0 which is Lessons List 
           showCartPage: false,
           cart: [], //cart array 
@@ -75,33 +75,38 @@ export default {
       };
     },
     methods: {
-      addToCart(lesson) {
-        if(lesson.spaces > 0) {
-          this.cart.push(lesson);
-          lesson.spaces = lesson.spaces - 1;
-          console.log(`Added ${lesson.subject}. Spaces left: ${lesson.spaces}`);
-        } else {
-          alert("Sorry, this lesson is full");
-        }
+      async addToCart(lesson) {
+        this.cart.push(lesson);
+
+        // update dataBase
+        await fetch(`http://localhost:3000/lesson/${lesson._id}/decrease`, {
+          method: "PUT",
+        });
+
+        lesson.spaces--;
       },
+
       toggleCheckout() {
         this.showCartPage = !this.showCartPage;
       },
-      removeFromCart(index) {
+
+      async removeFromCart(index) {
         const lesson = this.cart[index];
 
-        if(lesson) {
-          lesson.spaces = lesson.spaces+1;
-          this.cart.splice(index, 1);
-          console.log(`Removed ${lesson.subject}. Spaces now: ${lesson.spaces}`);
-        }
+        await fetch(`http://localhost:3000/lesson/${lesson._id}/increase`, {
+          method: "PUT",
+        });
+
+        lesson.spaces++;
+        this.cart.splice(index,1);
       },
-      handleCheckout(order) {
+
+      completeCheckout() {
+        alert("Order complete!");
         this.cart = [];
         this.showCartPage = false;
-        alert('Order placed! Thank you.')
-      }
-    }    
-}
+      },
+    },   
+};
 
 </script>

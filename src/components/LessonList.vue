@@ -25,7 +25,7 @@
     </div>
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-      <div class="col" v-for="lesson in sortedLessons" :key="lesson.id">
+      <div class="col" v-for="lesson in sortedLessons" :key="lesson._id">
         <div class="card h-100 shadow-sm">
           <img
             :src="lesson.image"
@@ -62,105 +62,38 @@ export default {
   props: ['page', 'addToCart'],
   data() {
     return {
+        lessons: [],
         sortKey: 'subject', //default
         sortDir: 'asc',
-      lessons: [
-        {
-          id: 1,
-          subject: 'Math',
-          location: 'Hendon',
-          price: 35,
-          spaces: 5,
-          image: 'https://picsum.photos/300/200?random=1'
-        },
-        {
-          id: 2,
-          subject: 'English',
-          location: 'Colindale',
-          price: 30,
-          spaces: 5,
-          image: 'https://picsum.photos/300/200?random=2'
-        },
-        {
-          id: 3,
-          subject: 'Science',
-          location: 'Brent Cross',
-          price: 40,
-          spaces: 5,
-          image: 'https://picsum.photos/300/200?random=3'
-        },
-        {
-          id: 4,
-          subject: 'Additional Maths',
-          location: 'Colindale',
-          price: 30,
-          spaces: 5,
-          image: 'https://picsum.photos/300/200?random=4'
-        },
-        {
-          id: 5,
-          subject: 'Physics',
-          location: 'Colindale',
-          price: 30,
-          spaces: 5,
-          image: 'https://picsum.photos/300/200?random=5'
-        },
-        {
-          id: 6,
-          subject: 'Chemistry',
-          location: 'Colindale',
-          price: 30,
-          spaces: 5,
-          image: 'https://picsum.photos/300/200?random=6'
-        },
-        {
-          id: 7,
-          subject: 'Biology',
-          location: 'Colindale',
-          price: 30,
-          spaces: 5,
-          image: 'https://picsum.photos/300/200?random=7'
-        },
-        {
-          id: 8,
-          subject: 'Ethics',
-          location: 'Colindale',
-          price: 30,
-          spaces: 5,
-          image: 'https://picsum.photos/300/200?random=8'
-        },
-        {
-          id: 9,
-          subject: 'Computer Science',
-          location: 'Colindale',
-          price: 30,
-          spaces: 5,
-          image: 'https://picsum.photos/300/200?random=9'
-        },
-        {
-          id: 10,
-          subject: 'Economics',
-          location: 'Colindale',
-          price: 30,
-          spaces: 5,
-          image: 'https://picsum.photos/300/200?random=10'
-        }
-      ]
-    }
+        };
+    },
+
+    async mounted() {
+        const response = await fetch ("http://localhost:3000/api/lessons");
+        const data = await response.json();
+
+        //connver backend field to frontend fields
+        this.lessons = data.map(item => ({
+            _id: item._id,
+            subject: item.topic,
+            location: item.location,
+            price: item.price,
+            spaces: item.space,
+            image: `https://picsum.photos/300/200?random=${Math.random()}`,
+        }));
   },
   computed: {
     sortedLessons() {
-        const key = this.sortKey
-        const dir = this.sortDir === 'asc' ? 1 : -1
+        const key = this.sortKey;
+        const dir = this.sortDir === 'asc' ? 1 : -1;
         return this.lessons.slice().sort((a,b) => {
-            const A = a[key]
-            const B = b[key]
-            if (A < B) return -1 * dir
-            if (A > B) return 1 * dir
-            return 0
-        } )
-    }
-  }
-
-}
+            const A = a[key];
+            const B = b[key];
+            if (A < B) return -1 * dir;
+            if (A > B) return 1 * dir;
+            return 0;
+        });
+    },
+  },
+};
 </script>

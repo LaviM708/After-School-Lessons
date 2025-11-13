@@ -68,18 +68,23 @@ export default {
     },
   },
   methods: {
-    handleCheckout() {
+    async handleCheckout() {
         const order = {
             name: this.name,
             phone: this.phone,
-            items: this.cart.map(l => ({ lessonId: l._id ?? l.id, spaces: 1 }))
+            items: this.cart.map((l) => ({
+                lessonId: l._id,
+                spaces:1,
+            })),
         };
 
-        // 🔔 Tell the parent “checkout done”
-        this.$emit('checkout', order);
-        
-        this.name = '';
-        this.phone = '';
+        // send to backend
+        await fetch("http://localhost:3000/order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify(order),
+        });
+        this.$emit("checkout"); 
     }
   },
 };

@@ -6,6 +6,7 @@
     <p v-if="cart.length === 0" class="text-muted">
       Your cart is empty.
     </p>
+    
     <!-- If cart has items -->
     <ul v-else class="list-group">
       <li
@@ -45,11 +46,12 @@ export default {
   name: 'Cart',
   props: ['cart'],
   emites: ['remove-item'],
+
   computed: {
     cartTotal() {
       // add up all prices in the cart
       return this.cart.reduce((sum, item) => sum + item.price, 0);
-    }
-  }
-}
+    },
+  },
+};
 </script>
