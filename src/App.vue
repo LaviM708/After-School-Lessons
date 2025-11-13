@@ -26,7 +26,9 @@
             />
 
             <!-- Checkout Form -->
-            <Checkout :cart="cart" />
+            <Checkout :cart="cart"
+              @checkout="handleCheckout"
+            />
         </div>
       </div>
     </div>
@@ -91,9 +93,13 @@ export default {
         if(lesson) {
           lesson.spaces = lesson.spaces+1;
           this.cart.splice(index, 1);
-
           console.log(`Removed ${lesson.subject}. Spaces now: ${lesson.spaces}`);
         }
+      },
+      handleCheckout(order) {
+        this.cart = [];
+        this.showCartPage = false;
+        alert('Order placed! Thank you.')
       }
     }    
 }

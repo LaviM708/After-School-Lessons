@@ -38,7 +38,7 @@
       <button
         type="submit"
         class="btn btn-primary w-100"
-        :disabled="!isNameValid || !isPhoneValid"
+        :disabled="!isNameValid || !isPhoneValid || cart.length ===0"
       >
         Checkout
       </button>
@@ -50,6 +50,7 @@
 export default {
   name: "Checkout",
   props: ["cart"],
+  emits: ['checkout'],
   data() {
     return {
       name: "",
@@ -68,15 +69,18 @@ export default {
   },
   methods: {
     handleCheckout() {
-      // When button is clicked and both fields valid
-      alert(
-        `✅ Thank you, ${this.name}! Your order for ${this.cart.length} lesson(s) has been submitted.`
-      );
+        const order = {
+            name: this.name,
+            phone: this.phone,
+            items: this.cart.map(l => ({ lessonId: l._id ?? l.id, spaces: 1 }))
+        };
 
-      // Optional: clear form after submission
-      this.name = "";
-      this.phone = "";
-    },
+        // 🔔 Tell the parent “checkout done”
+        this.$emit('checkout', order);
+        
+        this.name = '';
+        this.phone = '';
+    }
   },
 };
 </script>
