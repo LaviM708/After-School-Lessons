@@ -31,7 +31,7 @@
             :src="lesson.image"
             class="card-img-top"
             :alt="lesson.subject"
-            style="height: 180px; object-fit: cover;"
+            style="height: 180px; width: 100%; object-fit: contain; background-color: #f8f9fa;"
           />
           <div class="card-body">
             <h5 class="card-title">{{ lesson.subject }}</h5>
@@ -79,7 +79,8 @@ export default {
             location: item.location,
             price: item.price,
             spaces: item.space,
-            image: `https://picsum.photos/300/200?random=${Math.random()}`,
+            // will use local images based on subject name
+            image: `http://localhost:3000/images/${item.topic.toLowerCase().replace(/\s+/g, '-')}.png`,
         }));
   },
   computed: {

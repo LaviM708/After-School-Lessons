@@ -79,7 +79,7 @@ export default {
         };
 
         // send to backend
-        await fetch("http://localhost:3000/order", {
+        await fetch("http://localhost:3000/api/order", {
             method: "POST",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify(order),

@@ -79,7 +79,7 @@ export default {
         this.cart.push(lesson);
 
         // update dataBase
-        await fetch(`http://localhost:3000/lesson/${lesson._id}/decrease`, {
+        await fetch(`http://localhost:3000/api/lesson/${lesson._id}/decrease`, {
           method: "PUT",
         });
 
@@ -93,7 +93,7 @@ export default {
       async removeFromCart(index) {
         const lesson = this.cart[index];
 
-        await fetch(`http://localhost:3000/lesson/${lesson._id}/increase`, {
+        await fetch(`http://localhost:3000/api/lesson/${lesson._id}/increase`, {
           method: "PUT",
         });
 
