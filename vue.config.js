@@ -3,6 +3,7 @@ module.exports = defineConfig({
   transpileDependencies: true
 })
 module.exports = {
-  publicPath: '/After-School-Lessons/'
-}
+  publicPath: '/After-School-Lessons/',
+  outputDir: 'docs'
+};
 
