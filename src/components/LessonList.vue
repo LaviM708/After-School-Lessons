@@ -69,7 +69,7 @@ export default {
     },
 
     async mounted() {
-        const response = await fetch ("http://localhost:3000/api/lessons");
+        const response = await fetch ("https://backend-afterschoollessons.onrender.com/api/lessons");
         const data = await response.json();
 
         // ✅ make sure it's an array before using map
