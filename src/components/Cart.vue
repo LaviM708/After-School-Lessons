@@ -45,7 +45,7 @@
 export default {
   name: 'Cart',
   props: ['cart'],
-  emites: ['remove-item'],
+  emits: ['remove-item'],
 
   computed: {
     cartTotal() {

@@ -72,6 +72,13 @@ export default {
         const response = await fetch ("http://localhost:3000/api/lessons");
         const data = await response.json();
 
+        // ✅ make sure it's an array before using map
+        if (!Array.isArray(data)) {
+          console.error("Expected an array of lessons, got:", data);
+          this.lessons = [];
+          return;
+        }
+
         //connver backend field to frontend fields
         this.lessons = data.map(item => ({
             _id: item._id,
