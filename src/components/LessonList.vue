@@ -56,7 +56,9 @@
   </div>
 </template>
 
+
 <script>
+const API_BASE_URL = "https://backend-afterschoollessons.onrender.com";
 export default {
   name: 'LessonList',
   props: ['page', 'addToCart'],
@@ -69,7 +71,7 @@ export default {
     },
 
     async mounted() {
-        const response = await fetch ("https://backend-afterschoollessons.onrender.com/api/lessons");
+        const response = await fetch(`${API_BASE_URL}/api/lessons`);
         const data = await response.json();
 
         // ✅ make sure it's an array before using map
@@ -87,7 +89,7 @@ export default {
             price: item.price,
             spaces: item.space,
             // will use local images based on subject name
-            image: `http://localhost:3000/images/${item.topic.toLowerCase().replace(/\s+/g, '-')}.png`,
+            image: `${API_BASE_URL}/images/${item.topic.toLowerCase().replace(/\s+/g, '-')}.png`,
         }));
   },
   computed: {
