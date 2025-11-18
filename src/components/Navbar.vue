@@ -1,59 +1,64 @@
 <template>
-    <nav 
-     class="navbar navbar-expand-lg navbar-dark bg-dark">
-     <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light"
+        style="padding: 0.5rem 1.2rem; border-bottom: 1px solid #ddd;">
 
-        <a class="navbar-brand" href="#">After School Lessons</a>
+    <div class="container">
+      <a class="navbar-brand fw-semibold"
+        style="font-size: 1.55rem; font-weight: 600;">
+        After School Lessons
+      </a>
 
-        <button 
-            class="navbar-toggler" 
-            type="button" 
-            data-bs-toggle="collapse" 
-            data-bs-target="#navbarNav" 
-            aria-controls="navbarNav" 
-            aria-expanded="false" 
-            aria-label="Toggle navigation"
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li
+          v-for="(page, index) in pages"
+          :key="index"
+          class="nav-item"
         >
-            <span class="navbar-toggler-icon"></span>
-        </button>
+          <a
+            href="#"
+            class="nav-link"
+            :class="{ active: activePage === index }"
+            @click.prevent="navLinkClick(index)"
+            style="font-size: 1.15rem;
+            font-weight: 500;"
+          >
+            {{ page.link.text }}
+          </a>
+        </li>
+      </ul>
 
-        <!--Navbar link and Cart button-->
-        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-            <ul class="navbar-nav">
-                <li v-for="(page, index) in pages" class="nav-item" :key="index">
-                    <!-- add the CSS class active when this condition is TRUE. It's only true when activePage == index -->
-                    <a 
-                        class="nav-link" 
-                        :class="{active: activePage == index}" 
-                        aria-current="page" 
-                        :href="page.link.url"
-                        :title="`This link goes to the ${page.link.text} page`"
-                        @click.prevent="navLinkClick(index)" 
-                    > 
-                        {{page.link.text}} 
-                    </a>
-                </li>
-            </ul>
+      <!-- Checkout / Cart button -->
+      <button
+        class="btn btn-light position-relative d-flex flex-column align-items-center justify-content-center"
+        :disabled="cart.length === 0"
+        @click="$emit('toggle-checkout')"
+        style="width: 80px; height: 80px; border-radius: 9999px; padding: 6px;"
+      >
+        <!-- Bigger Cart Icon -->
+        <i class="bi bi-cart2" style="font-size: 2.1rem;"></i>
 
-            <!-- Cart button on the top right corner-->
-             <div class="d-flex ms-auto">
-                <button 
-                    class="btn btn-success"
-                    type="button"
-                    :disabled="cart.length === 0"
-                    @click="$emit('toggle-checkout')"
-                >
-                    Cart ({{ cart.length }})
-                </button>
-            </div>
-        </div>
-     </div>
-    </nav>
+        <!-- Text under icon -->
+        <span style="font-size: 0.95rem; margin-top: 3px;">Cart</span>
+
+        <!-- Red badge with item count -->
+        <span
+            v-if="cart.length > 0"
+            class="badge rounded-pill bg-danger"
+            style="position: absolute; top: 2px; right: 4px; font-size: 0.85rem; min-width: 18px;"
+        >
+            {{ cart.length }}
+        </span>
+      </button>
+
+
+
+    </div>
+  </nav>
 </template>
 
 <script>
 export default {
-    props:['pages', 'activePage', 'navLinkClick', 'cart'],
-    emits: ['toggle-checkout']
-}
+  name: 'Navbar',
+  props: ['pages', 'activePage', 'navLinkClick', 'cart'],
+};
 </script>
