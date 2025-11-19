@@ -50,7 +50,7 @@
           :key="item.lesson._id || index"
           class="list-group-item d-flex justify-content-between align-items-center"
         >
-          <div>
+          <div class="flex-grow-1 me-3">
             <strong>{{ item.lesson.subject }}</strong>
             <div class="small text-muted">{{ item.lesson.location }}</div>
           </div>
@@ -60,17 +60,12 @@
             <button
               class="btn btn-sm btn-outline-secondary"
               @click="decreaseQuantity(index)"
-            >
-              −
-            </button>
+            >-</button>
             <span class="mx-2">{{ item.quantity }}</span>
             <button
               class="btn btn-sm btn-outline-secondary"
               @click="increaseQuantity(index)"
-            >
-              +
-            </button>
-
+            >+</button>
             <button
               class="btn btn-sm btn-outline-danger ms-2"
               @click="removeFromCart(index)"
@@ -132,7 +127,7 @@
               @increase-qty="increaseQuantity"
               @decrease-qty="decreaseQuantity"
             />
-            
+
         </div>
         <!-- Right side: checkout form -->
           <div class="col-md-6" v-if="showCheckoutForm && cart.length > 0">

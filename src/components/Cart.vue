@@ -14,7 +14,7 @@
         :key="item.lesson._id || index"
         class="list-group-item d-flex justify-content-between align-items-center"
       >
-        <div>
+        <div class="flex-grow-1 me-3">
           <strong>{{ item.lesson.subject }}</strong>
           <div class="small text-muted">{{ item.lesson.location }}</div>
         </div>
@@ -23,17 +23,12 @@
           <button
             class="btn btn-sm btn-outline-secondary"
             @click="$emit('decrease-qty', index)"
-          >
-            −
-          </button>
+          >−</button>
           <span class="mx-2">{{ item.quantity }}</span>
           <button
             class="btn btn-sm btn-outline-secondary"
             @click="$emit('increase-qty', index)"
-          >
-            +
-          </button>
-
+          >+</button>
           <button
             class="btn btn-sm btn-outline-danger ms-2"
             @click="$emit('remove-item', index)"
