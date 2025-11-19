@@ -31,7 +31,7 @@
       <button
         class="btn btn-light position-relative d-flex flex-column align-items-center justify-content-center"
         :disabled="cart.length === 0"
-        @click="$emit('toggle-checkout')"
+        @click="$emit('open-cart')"
         style="width: 80px; height: 80px; border-radius: 9999px; padding: 6px;"
       >
         <!-- Bigger Cart Icon -->
@@ -49,9 +49,6 @@
             {{ cart.length }}
         </span>
       </button>
-
-
-
     </div>
   </nav>
 </template>

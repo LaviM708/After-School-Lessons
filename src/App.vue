@@ -3,10 +3,106 @@
     <navbar
       :pages="pages"
       :active-page="activePage"
-      :nav-link-click="changePage"
+      :nav-link-click="handleNavClick"
       :cart="cart"
-      @toggle-checkout="goToCheckout" 
+      @open-cart="openCartFromIcon" 
     ></navbar>
+
+    <!-- POPUP -->
+    <div
+      v-if="showAddedModal.visible"
+      class="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+      style="background: rgba(0,0,0,0.4); z-index: 1050;"
+    >
+      <div class="bg-white rounded shadow p-4" style="min-width: 360px; max-width: 480px;">
+        <!-- header row -->
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h5 class="mb-0">
+            <!-- different title depending on how we opened it -->
+            <span v-if="showAddedModal.fromCartIcon">Your cart</span>
+            <span v-else>Item added to cart</span>
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            @click="closeModal"
+          ></button>
+        </div>
+
+        <!-- “X has been added…” line only for first add -->
+        <p v-if="!showAddedModal.fromCartIcon && showAddedModal.lessonName">
+          <strong>{{ showAddedModal.lessonName }}</strong>
+          has been added to your cart.
+        </p>
+
+        <!-- CART LIST -->
+        <div v-if="cart.length === 0" class="text-muted">
+          Your cart is empty.
+        </div>
+        <ul
+          v-else
+          class="list-group mb-3"
+          style="max-height: 260px; overflow-y: auto;"
+        >
+          <li
+          v-for="(item, index) in cart"
+          :key="item.lesson._id || index"
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          <div>
+            <strong>{{ item.lesson.subject }}</strong>
+            <div class="small text-muted">{{ item.lesson.location }}</div>
+          </div>
+
+          <!-- quantity + remove controls -->
+          <div class="d-flex align-items-center">
+            <button
+              class="btn btn-sm btn-outline-secondary"
+              @click="decreaseQuantity(index)"
+            >
+              −
+            </button>
+            <span class="mx-2">{{ item.quantity }}</span>
+            <button
+              class="btn btn-sm btn-outline-secondary"
+              @click="increaseQuantity(index)"
+            >
+              +
+            </button>
+
+            <button
+              class="btn btn-sm btn-outline-danger ms-2"
+              @click="removeFromCart(index)"
+            >
+              Remove
+            </button>
+          </div>
+        </li>
+
+        </ul>
+
+        <!-- BUTTONS -->
+        <div class="d-flex justify-content-center gap-2">
+          <button
+            class="btn btn-outline-secondary"
+            @click="continueShoppingFromModal"
+          >
+            Continue shopping
+          </button>
+
+          <button
+            class="btn btn-primary"
+            :disabled="cart.length === 0"
+            @click="goToCheckoutFromModal"
+          >
+            Go to checkout
+          </button>
+        </div>
+      </div>
+    </div>
+
+
 
     <div class="container mt-3">
       <!-- PAGE 0: Lessons -->
@@ -23,21 +119,24 @@
         <p>{{ pages[1].content }}</p>
       </div>
 
-      <!-- PAGE 2: Checkout PAGE -->
+      <!-- PAGE 2: Checkout -->
       <div v-else-if="activePage === 2">
-        <h1 class="mb-3">{{ pages[2].pageTitle }}</h1>
+        <h1 class="mb-3">Checkout</h1>
 
         <div class="row">
-          <!-- Cart on the left -->
-          <div class="col-md-7">
+          <div class="col-md-6">
+            <!-- Cart List -->
             <Cart
               :cart="cart"
               @remove-item="removeFromCart"
+              @increase-qty="increaseQuantity"
+              @decrease-qty="decreaseQuantity"
             />
-          </div>
-
-          <!-- Checkout form on the right -->
-          <div class="col-md-5">
+            
+        </div>
+        <!-- Right side: checkout form -->
+          <div class="col-md-6" v-if="showCheckoutForm && cart.length > 0">
+            <h2 class="h4 mb-3">Checkout</h2>
             <Checkout
               :cart="cart"
               @checkout="completeCheckout"
@@ -66,6 +165,12 @@ export default {
     return {
       activePage: 0, // 0: Lessons, 1: About, 2: Checkout
       cart: [],
+      showCheckoutForm: false,
+      showAddedModal: {
+        visible: false,
+        lessonName: "",
+        fromCartIcon: false,   // <— NEW: true when opened via cart icon
+      },
       pages: [
         {
           link: { text: 'Lessons', url: 'LessonList.vue' },
@@ -76,59 +181,134 @@ export default {
           link: { text: 'About', url: 'about.html' },
           pageTitle: 'About',
           content: 'This is the about content'
-        },
-        {
-          link: { text: 'Checkout', url: 'Checkout.vue' },
-          pageTitle: 'Checkout',
-          content: 'This is the Checkout'
         }
-      ]
+      ],
     };
   },
   methods: {
-    changePage(index) {
+    // Navbar link click
+    handleNavClick(index) {
       this.activePage = index;
+      this.showCheckoutForm = false;;
     },
 
     async addToCart(lesson) {
-      this.cart.push(lesson);
+      // if cart was empty before adding
+      const wasEmptyBefore = this.cart.length === 0;
 
-      // update database
-      await fetch(`https://backend-afterschoollessons.onrender.com/api/lesson/${lesson._id}/decrease`, {
-        method: 'PUT',
-      });
+      // if this lesson is already in the cart
+      const existing = this.cart.find(
+        (item) => item.lesson._id === lesson._id
+      );
 
-      lesson.spaces--;
-    },
+      // only add if there are spaces left
+      if (lesson.spaces > 0) {
+        if (existing) {
+          existing.quantity += 1;      // increase quantity
+        } else {
+          this.cart.push({
+            lesson,                
+            quantity: 1,
+          });
+        }
 
-    goToCheckout() {
-      // only go to checkout page if there are items in the cart
-      if (this.cart.length > 0) {
-        this.activePage = 2;  // show Checkout page
+        lesson.spaces--;
+      }
+      
+      // only show popup when first item is added
+      if (wasEmptyBefore && this.cart.length > 0) {
+        // show popup only for the very first item added
+        this.showAddedModal.visible = true;
+        this.showAddedModal.lessonName = lesson.subject;
+        this.showAddedModal.fromCartIcon = false;
       }
     },
 
     async removeFromCart(index) {
-      const lesson = this.cart[index];
+      const item = this.cart[index];
+      const lesson = item.lesson;
 
-      await fetch(`https://backend-afterschoollessons.onrender.com/api/lesson/${lesson._id}/increase`, {
-        method: 'PUT',
-      });
+      // give all quantity back to spaces
+      lesson.spaces += item.quantity;
 
-      lesson.spaces++;
+
       this.cart.splice(index, 1);
 
       // if cart becomes empty while on checkout page, send user back to lessons
       if (this.cart.length === 0 && this.activePage === 2) {
         this.activePage = 0;
+        this.showCheckoutForm = false;
       }
+    },
+
+    increaseQuantity(index) {
+      const item = this.cart[index];
+      const lesson = item.lesson;
+
+      if (lesson.spaces > 0) {
+        item.quantity += 1;
+        lesson.spaces--;
+      }
+    },
+
+    decreaseQuantity(index) {
+      const item = this.cart[index];
+      const lesson = item.lesson;
+
+      // if more than 1, just decrease quantity
+      if (item.quantity > 1) {
+        item.quantity -= 1;
+        lesson.spaces++;
+      } else {
+        // if quantity would go to 0, use removeFromCart
+        this.removeFromCart(index);
+      }
+    },
+
+    // when user clicks the blue "Checkout" button under the cart
+    startCheckout() {
+      if (this.cart.length > 0) {
+        this.showCheckoutForm = true;
+      }
+    },
+
+    continueShopping() {
+      this.activePage = 0; //back to lesssons
+      this.showCheckoutForm = false;
     },
 
     completeCheckout() {
       alert('Order complete!');
       this.cart = [];
       this.activePage = 0; // go back to lesson list after checkout
+      this.showCheckoutForm = false;
     },
+
+    closeModal() {
+      this.showAddedModal.visible = false;
+    },
+
+    continueShoppingFromModal() {
+      this.showAddedModal.visible = false;
+      this.activePage = 0;        // back to Lessons
+      this.showCheckoutForm = false;
+    },
+
+    goToCheckoutFromModal() {
+      if (!this.cart.length) return;
+        this.showAddedModal.visible = false;
+        this.activePage = 2;
+        this.showCheckoutForm = true;
+    },
+
+    openCartFromIcon() {
+      if (!this.cart.length) return;  // nothing to show
+
+      this.showAddedModal.visible = true;
+      this.showAddedModal.fromCartIcon = true;  // means "cart view", not "just added"
+      // optional: lessonName not needed here
+    },
+
   },
 };
 </script>
