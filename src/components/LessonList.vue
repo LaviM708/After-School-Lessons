@@ -2,6 +2,19 @@
     <div class="container mt-4">
     <h1 class="mb-4">{{ page.pageTitle }}</h1>
 
+    <!-- Search bar -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Search</label>
+        <input
+          v-model="searchTerm"
+          @input="searchLessons"   
+          type="text"
+          class="form-control"
+          placeholder="Search by subject, location, price, spaces..."
+        />
+      </div>
+    </div>
 
     <!-- Sort Section -->
     <div class="row mb-3">
@@ -67,6 +80,7 @@ export default {
         lessons: [],
         sortKey: 'subject', //default
         sortDir: 'asc',
+        searchTerm: '',
         };
     },
 
@@ -74,14 +88,14 @@ export default {
         const response = await fetch(`${API_BASE_URL}/api/lessons`);
         const data = await response.json();
 
-        // ✅ make sure it's an array before using map
+        // making sure it's an array before using map
         if (!Array.isArray(data)) {
           console.error("Expected an array of lessons, got:", data);
           this.lessons = [];
           return;
         }
 
-        //connver backend field to frontend fields
+        //convert backend field to frontend fields
         this.lessons = data.map(item => ({
             _id: item._id,
             subject: item.topic,
@@ -105,5 +119,42 @@ export default {
         });
     },
   },
+
+  methods: {
+    async searchLessons() {
+      const q = this.searchTerm.trim();
+
+      // if search bar is empty list all the lessons
+      if(!q) {
+        const res = await fetch('${API_BASE_URL}/api/lessons');
+        const data = await res.json();
+
+        this.lessons = data.map(item => ({
+          _id: item._id,
+          subject: item.topic,
+          location: item.location,
+          price: item.price,
+          spaces: item.space,
+          image: `${API_BASE_URL}/images/${item.topic.toLowerCase().replace(/\s+/g, '-')}.png`,
+        }));
+        return;
+      }
+
+      // otherwise → search
+      const res = await fetch(`${API_BASE_URL}/api/search?q=${encodeURIComponent(q)}`);
+      const data = await res.json();
+
+      // convert DB fields to frontend fields
+      this.lessons = data.map(item => ({
+        _id: item._id,
+        subject: item.topic,
+        location: item.location,
+        price: item.price,
+        spaces: item.space,
+        image: `${API_BASE_URL}/images/${item.topic.toLowerCase().replace(/\s+/g, '-')}.png`,
+      }));
+    }
+  }
+
 };
 </script>
