@@ -84,7 +84,6 @@ export default {
         };
     },
 
-
   async mounted() {
     // load everything once when page first opens
     await this.loadLessons();

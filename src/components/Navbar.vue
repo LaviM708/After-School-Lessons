@@ -30,11 +30,11 @@
       <!-- Checkout / Cart button -->
       <button
         class="btn btn-light position-relative d-flex flex-column align-items-center justify-content-center"
-        :disabled="cart.length === 0"
+        :disabled="cartCount === 0"
         @click="$emit('open-cart')"
         style="width: 80px; height: 80px; border-radius: 9999px; padding: 6px;"
       >
-        <!-- Bigger Cart Icon -->
+        <!-- Cart Icon -->
         <i class="bi bi-cart2" style="font-size: 2.1rem;"></i>
 
         <!-- Text under icon -->
@@ -42,7 +42,7 @@
 
         <!-- Red badge with item count -->
         <span
-            v-if="cart.length > 0"
+            v-if="cartCount > 0"
             class="badge rounded-pill bg-danger"
             style="position: absolute; top: 2px; right: 4px; font-size: 0.85rem; min-width: 18px;"
         >

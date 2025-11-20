@@ -90,8 +90,6 @@ export default {
         // 2) Decrease spaces in DB for each lesson in the cart
         for (const item of this.cart) {
           const { lesson, quantity } = item;
-
-          // send "decrease" request multiple times OR adjust your backend to accept a quantity value
           for (let i = 0; i < quantity; i++) {
             await fetch(`${backendBaseUrl}/api/lesson/${lesson._id}/decrease`, {
               method: "PUT",

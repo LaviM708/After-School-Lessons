@@ -30,7 +30,7 @@
           ></button>
         </div>
 
-        <!-- “X has been added…” line only for first add -->
+        <!-- “ x has been added” line only for first subject -->
         <p v-if="!showAddedModal.fromCartIcon && showAddedModal.lessonName">
           <strong>{{ showAddedModal.lessonName }}</strong>
           has been added to your cart.
@@ -97,8 +97,6 @@
       </div>
     </div>
 
-
-
     <div class="container mt-3">
       <!-- PAGE 0: Lessons -->
       <div v-if="activePage === 0">
@@ -108,7 +106,7 @@
         />
       </div>
 
-      <!-- PAGE 1: About (simple text page for now) -->
+      <!-- PAGE 1: About  -->
       <div v-else-if="activePage === 1">
         <h1 class="mb-3">{{ pages[1].pageTitle }}</h1>
         <p>{{ pages[1].content }}</p>
@@ -127,9 +125,8 @@
               @increase-qty="increaseQuantity"
               @decrease-qty="decreaseQuantity"
             />
-
         </div>
-        <!-- Right side: checkout form -->
+        <!-- checkout form -->
           <div class="col-md-6" v-if="showCheckoutForm && cart.length > 0">
             <h2 class="h4 mb-3">Checkout</h2>
             <Checkout
@@ -164,7 +161,7 @@ export default {
       showAddedModal: {
         visible: false,
         lessonName: "",
-        fromCartIcon: false,   // <— NEW: true when opened via cart icon
+        fromCartIcon: false,   // <— true when opened via cart icon
       },
       pages: [
         {
@@ -184,7 +181,7 @@ export default {
     // Navbar link click
     handleNavClick(index) {
       this.activePage = index;
-      this.showCheckoutForm = false;;
+      this.showCheckoutForm = false;
     },
 
     async addToCart(lesson) {
@@ -199,7 +196,7 @@ export default {
       // only add if there are spaces left
       if (lesson.spaces > 0) {
         if (existing) {
-          existing.quantity += 1;      // increase quantity
+          existing.quantity += 1;  // increase quantity
         } else {
           this.cart.push({
             lesson,                
@@ -225,7 +222,6 @@ export default {
 
       // give all quantity back to spaces
       lesson.spaces += item.quantity;
-
 
       this.cart.splice(index, 1);
 
@@ -260,18 +256,6 @@ export default {
       }
     },
 
-    // when user clicks the blue "Checkout" button under the cart
-    startCheckout() {
-      if (this.cart.length > 0) {
-        this.showCheckoutForm = true;
-      }
-    },
-
-    continueShopping() {
-      this.activePage = 0; //back to lesssons
-      this.showCheckoutForm = false;
-    },
-
     completeCheckout() {
       alert('Order complete!');
       this.cart = [];
@@ -298,12 +282,10 @@ export default {
 
     openCartFromIcon() {
       if (!this.cart.length) return;  // nothing to show
-
+      
       this.showAddedModal.visible = true;
       this.showAddedModal.fromCartIcon = true;  // means "cart view", not "just added"
-      // optional: lessonName not needed here
     },
-
   },
 };
 </script>
