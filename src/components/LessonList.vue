@@ -84,28 +84,12 @@ export default {
         };
     },
 
-    async mounted() {
-        const response = await fetch(`${API_BASE_URL}/api/lessons`);
-        const data = await response.json();
 
-        // making sure it's an array before using map
-        if (!Array.isArray(data)) {
-          console.error("Expected an array of lessons, got:", data);
-          this.lessons = [];
-          return;
-        }
-
-        //convert backend field to frontend fields
-        this.lessons = data.map(item => ({
-            _id: item._id,
-            subject: item.topic,
-            location: item.location,
-            price: item.price,
-            spaces: item.space,
-            // will use local images based on subject name
-            image: `${API_BASE_URL}/images/${item.topic.toLowerCase().replace(/\s+/g, '-')}.png`,
-        }));
+  async mounted() {
+    // load everything once when page first opens
+    await this.loadLessons();
   },
+
   computed: {
     sortedLessons() {
         const key = this.sortKey;
@@ -121,6 +105,32 @@ export default {
   },
 
   methods: {
+    async loadLessons() {
+      console.log("loadLessons() called");
+
+      const res = await fetch(`${API_BASE_URL}/api/lessons`);
+      const data = await res.json();
+
+      if (!Array.isArray(data)) {
+        console.error("Expected an array of lessons, got:", data);
+        this.lessons = [];
+        return;
+      }
+
+      this.lessons = data.map((item) => ({
+        _id: item._id,
+        subject: item.topic,
+        location: item.location,
+        price: item.price,
+        spaces: item.space,
+        image: `${API_BASE_URL}/images/${item.topic
+          .toLowerCase()
+          .replace(/\s+/g, "-")}.png`,
+      }));
+
+      console.log("Loaded lessons:", this.lessons.length);
+    },
+
     async searchLessons() {
       const q = this.searchTerm.trim();
 
@@ -140,21 +150,25 @@ export default {
         return;
       }
 
-      // otherwise → search
-      const res = await fetch(`${API_BASE_URL}/api/search?q=${encodeURIComponent(q)}`);
+      // otherwise -> ask backend
+      const res = await fetch(
+        `${API_BASE_URL}/api/search?q=${encodeURIComponent(q)}`
+      );
       const data = await res.json();
 
-      // convert DB fields to frontend fields
-      this.lessons = data.map(item => ({
+      this.lessons = data.map((item) => ({
         _id: item._id,
         subject: item.topic,
         location: item.location,
         price: item.price,
         spaces: item.space,
-        image: `${API_BASE_URL}/images/${item.topic.toLowerCase().replace(/\s+/g, '-')}.png`,
-      }));
-    }
-  }
-
+        image: `${API_BASE_URL}/images/${item.topic
+          .toLowerCase()
+          .replace(/\s+/g, "-")}.png`,
+        }));
+        
+        console.log("Search results:", this.lessons.length);
+    },
+  },
 };
 </script>
