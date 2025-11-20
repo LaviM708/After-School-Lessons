@@ -126,7 +126,7 @@ export default {
 
       // if search bar is empty list all the lessons
       if(!q) {
-        const res = await fetch('${API_BASE_URL}/api/lessons');
+        const res = await fetch(`${API_BASE_URL}/api/lessons`);
         const data = await res.json();
 
         this.lessons = data.map(item => ({
