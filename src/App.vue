@@ -136,6 +136,27 @@
           </div>
         </div>
       </div>
+
+      <!-- PAGE 3: Order complete -->
+      <div v-else-if="activePage === 3 && orderSummary" class="mt-4">
+        <div class="text-center">
+          <h1 class="mb-3">Thank you, {{ orderSummary.name }}!</h1>
+          <p class="lead">
+            Your order is complete.
+          </p>
+          <p>
+            Your order number is
+            <strong>#{{ orderSummary.orderNumber }}</strong>.
+          </p>
+          <p class="text-muted">
+            A confirmation receipt will be sent to your email as well.
+          </p>
+
+          <button class="btn btn-primary mt-3" @click="handleNavClick(0)">
+            Back to Lessons
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -161,8 +182,9 @@ export default {
       showAddedModal: {
         visible: false,
         lessonName: "",
-        fromCartIcon: false,   // <— true when opened via cart icon
+        fromCartIcon: false,   //true when opened via cart icon
       },
+      orderSummary: null,
       pages: [
         {
           link: { text: 'Lessons', url: 'LessonList.vue' },
@@ -256,11 +278,12 @@ export default {
       }
     },
 
-    completeCheckout() {
-      alert('Order complete!');
+    completeCheckout(orderInfo) {
+      this.orderSummary = orderInfo; // orderInfo will come from Checkout.vue
+
       this.cart = [];
-      this.activePage = 0; // go back to lesson list after checkout
       this.showCheckoutForm = false;
+      this.activePage = 3; // show Order complete page
     },
 
     closeModal() {
@@ -282,7 +305,7 @@ export default {
 
     openCartFromIcon() {
       if (!this.cart.length) return;  // nothing to show
-      
+
       this.showAddedModal.visible = true;
       this.showAddedModal.fromCartIcon = true;  // means "cart view", not "just added"
     },

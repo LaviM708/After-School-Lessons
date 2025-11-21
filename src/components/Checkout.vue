@@ -80,16 +80,22 @@ export default {
             })),
         };
 
-        // send to backend
-        await fetch(`${backendBaseUrl}/api/order`, {
+        // send order to backend
+        const response = await fetch(`${backendBaseUrl}/api/order`, {
             method: "POST",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify(order),
         });
+
+        const result = await response.json();
+
+        // Use backend OrderId if we have it, otherwise make a random 6 digit number
+        const orderNumber = result.orderMumber;
         
-        // 2) Decrease spaces in DB for each lesson in the cart
+        //  Decrease spaces in DB for each lesson in the cart
         for (const item of this.cart) {
           const { lesson, quantity } = item;
+
           for (let i = 0; i < quantity; i++) {
             await fetch(`${backendBaseUrl}/api/lesson/${lesson._id}/decrease`, {
               method: "PUT",
@@ -98,7 +104,11 @@ export default {
         }
 
         // tell app.vue that checkout is done
-        this.$emit("checkout"); 
+        this.$emit("checkout", {
+          name: this.name,
+          phone: this.phone,
+          orderNumber: orderNumber,
+        });
     }
   },
 };
