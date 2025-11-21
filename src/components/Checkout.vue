@@ -90,7 +90,7 @@ export default {
         const result = await response.json();
 
         // Use backend OrderId if we have it, otherwise make a random 6 digit number
-        const orderNumber = result.orderMumber;
+        const orderNumber = result.orderNumber;
         
         //  Decrease spaces in DB for each lesson in the cart
         for (const item of this.cart) {
