@@ -76,6 +76,7 @@ export default {
             phone: this.phone,
             items: this.cart.map(cartItem => ({
                 lessonId: cartItem.lesson._id,
+                subject: cartItem.lesson.subject,
                 spaces: cartItem.quantity,
             })),
         };

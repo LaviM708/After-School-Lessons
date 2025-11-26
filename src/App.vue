@@ -55,7 +55,7 @@
             <div class="small text-muted">{{ item.lesson.location }}</div>
           </div>
 
-          <!-- quantity + remove controls -->
+          <!-- quantity and remove controls -->
           <div class="d-flex align-items-center">
             <button
               class="btn btn-sm btn-outline-secondary"
