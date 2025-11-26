@@ -108,8 +108,45 @@
 
       <!-- PAGE 1: About  -->
       <div v-else-if="activePage === 1">
-        <h1 class="mb-3">{{ pages[1].pageTitle }}</h1>
-        <p>{{ pages[1].content }}</p>
+        <div class="mt-3">
+          <h1 class="mb-3">{{ pages[1].pageTitle }}</h1>
+
+          <p>
+            This website is a small demo for after school lessons.
+            It is part of my Full Stack Development coursework.  
+            The idea is that parents and students can browse different subjects,
+            check how many spaces are left, and book a place online.
+          </p>
+
+          <p>
+            All the lesson information is loaded from a MongoDB database
+            through an Express.js REST API, and the front-end is built with Vue.js
+            and Bootstrap.
+          </p>
+
+          <h4 class="mt-4">How it works</h4>
+          <ul>
+            <li>Use the <strong>Lessons</strong> page to see all available subjects.</li>
+            <li>Sort by subject, location, price, or spaces, and search as you type.</li>
+            <li>Add lessons to your cart – spaces are reduced while they are in the cart.</li>
+            <li>Go to <strong>Checkout</strong>, enter your name and phone number, and submit your order.</li>
+            <li>Your order is saved in MongoDB with an auto-generated order number.</li>
+          </ul>
+
+          <h4 class="mt-4">Technologies used</h4>
+          <ul>
+            <li>Vue.js for the front-end</li>
+            <li>Bootstrap for basic styling and layout</li>
+            <li>Node.js and Express.js for the back-end API</li>
+            <li>MongoDB for lesson and order data</li>
+            <li>Fetch API for all front-end requests</li>
+          </ul>
+
+          <p class="mt-4 text-muted">
+            This project is for learning purposes only.  
+            The lessons, locations and prices are example data, not a real business.
+          </p>
+        </div>
       </div>
 
       <!-- PAGE 2: Checkout -->
@@ -188,13 +225,11 @@ export default {
       pages: [
         {
           link: { text: 'Lessons', url: 'LessonList.vue' },
-          pageTitle: 'Lessons List',
-          content: 'This is the list of lessons'
+          pageTitle: 'Lessons List'
         },
         {
           link: { text: 'About', url: 'about.html' },
-          pageTitle: 'About',
-          content: 'This is the about content'
+          pageTitle: 'About'
         }
       ],
     };
