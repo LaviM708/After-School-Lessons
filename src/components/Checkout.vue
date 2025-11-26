@@ -77,6 +77,8 @@ export default {
             items: this.cart.map(cartItem => ({
                 lessonId: cartItem.lesson._id,
                 subject: cartItem.lesson.subject,
+                location: cartItem.lesson.location,
+                price: cartItem.lesson.price,
                 spaces: cartItem.quantity,
             })),
         };
