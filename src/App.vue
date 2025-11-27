@@ -18,7 +18,7 @@
         <!-- header row -->
         <div class="d-flex justify-content-between align-items-center mb-2">
           <h5 class="mb-0">
-            <!-- different title depending on how we opened it -->
+            <!-- different title depending on how we open it -->
             <span v-if="showAddedModal.fromCartIcon">Your cart</span>
             <span v-else>Item added to cart</span>
           </h5>
@@ -235,17 +235,14 @@ export default {
     };
   },
   methods: {
-    // Navbar link click
     handleNavClick(index) {
       this.activePage = index;
       this.showCheckoutForm = false;
     },
 
     async addToCart(lesson) {
-      // if cart was empty before adding
       const wasEmptyBefore = this.cart.length === 0;
 
-      // if this lesson is already in the cart
       const existing = this.cart.find(
         (item) => item.lesson._id === lesson._id
       );
@@ -264,9 +261,9 @@ export default {
         lesson.spaces--;
       }
       
-      // only show popup when first item is added
+
+    // only show popup when first item is added
       if (wasEmptyBefore && this.cart.length > 0) {
-        // show popup only for the very first item added
         this.showAddedModal.visible = true;
         this.showAddedModal.lessonName = lesson.subject;
         this.showAddedModal.fromCartIcon = false;
@@ -282,7 +279,6 @@ export default {
 
       this.cart.splice(index, 1);
 
-      // if cart becomes empty while on checkout page, send user back to lessons
       if (this.cart.length === 0 && this.activePage === 2) {
         this.activePage = 0;
         this.showCheckoutForm = false;
@@ -303,12 +299,10 @@ export default {
       const item = this.cart[index];
       const lesson = item.lesson;
 
-      // if more than 1, just decrease quantity
       if (item.quantity > 1) {
         item.quantity -= 1;
         lesson.spaces++;
       } else {
-        // if quantity would go to 0, use removeFromCart
         this.removeFromCart(index);
       }
     },
@@ -339,10 +333,10 @@ export default {
     },
 
     openCartFromIcon() {
-      if (!this.cart.length) return;  // nothing to show
+      if (!this.cart.length) return;
 
       this.showAddedModal.visible = true;
-      this.showAddedModal.fromCartIcon = true;  // means "cart view", not "just added"
+      this.showAddedModal.fromCartIcon = true;
     },
   },
 };

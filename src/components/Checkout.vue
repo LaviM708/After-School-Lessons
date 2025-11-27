@@ -58,11 +58,11 @@ export default {
     };
   },
   computed: {
-    // Check if name contains only letters (A-Z or a-z)
+    // name contains only letters
     isNameValid() {
       return /^[A-Za-z\s]+$/.test(this.name);
     },
-    // Check if phone contains only numbers (0-9)
+    //phone contains only numbers
     isPhoneValid() {
       return /^[0-9]+$/.test(this.phone);
     },
@@ -92,10 +92,8 @@ export default {
 
         const result = await response.json();
 
-        // Use backend OrderId if we have it, otherwise make a random 6 digit number
         const orderNumber = result.orderNumber;
         
-        //  Decrease spaces in DB for each lesson in the cart
         for (const item of this.cart) {
           const { lesson, quantity } = item;
 

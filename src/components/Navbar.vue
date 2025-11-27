@@ -27,7 +27,7 @@
         </li>
       </ul>
 
-      <!-- Checkout / Cart button -->
+      <!-- Cart icon -->
       <button
         class="btn btn-light position-relative d-flex flex-column align-items-center justify-content-center"
         :disabled="cartCount === 0"

@@ -37,6 +37,7 @@
       </div>
     </div>
 
+    <!-- Subject view -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       <div class="col" v-for="lesson in sortedLessons" :key="lesson._id">
         <div class="card h-100 shadow-sm">
@@ -105,8 +106,6 @@ export default {
 
   methods: {
     async loadLessons() {
-      console.log("loadLessons() called");
-
       const res = await fetch(`${API_BASE_URL}/api/lessons`);
       const data = await res.json();
 
@@ -149,7 +148,7 @@ export default {
         return;
       }
 
-      // otherwise -> ask backend
+      // otherwise ask backend
       const res = await fetch(
         `${API_BASE_URL}/api/search?q=${encodeURIComponent(q)}`
       );
