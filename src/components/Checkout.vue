@@ -30,7 +30,7 @@
           required
         />
         <small v-if="phone && !isPhoneValid" class="text-danger">
-          Phone must contain numbers only.
+          Please enter a valid UK mobile number (07.. or +44..)
         </small>
       </div>
 
@@ -62,10 +62,13 @@ export default {
     isNameValid() {
       return /^[A-Za-z\s]+$/.test(this.name);
     },
-    //phone contains only numbers
+
+    // valid uk phone number only 
     isPhoneValid() {
-      return /^[0-9]+$/.test(this.phone);
-    },
+    const ukPhoneRegex = /^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$/;
+    return ukPhoneRegex.test(this.phone.trim());
+  }
+
   },
   methods: {
     async handleCheckout() {
