@@ -165,7 +165,6 @@
         </div>
         <!-- checkout form -->
           <div class="col-md-6" v-if="showCheckoutForm && cart.length > 0">
-            <h2 class="h4 mb-3">Checkout</h2>
             <Checkout
               :cart="cart"
               @checkout="completeCheckout"

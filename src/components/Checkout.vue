@@ -1,6 +1,6 @@
 <template>
   <div class="mt-4">
-    <h3 class="mb-3">Checkout</h3>
+    <h2 class="mb-3">Your Details</h2>
 
     <!-- Checkout form -->
     <form @submit.prevent="handleCheckout">
