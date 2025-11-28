@@ -249,7 +249,7 @@ export default {
       // only add if there are spaces left
       if (lesson.spaces > 0) {
         if (existing) {
-          existing.quantity += 1;  // increase quantity
+          existing.quantity += 1;
         } else {
           this.cart.push({
             lesson,                

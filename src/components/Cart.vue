@@ -55,7 +55,6 @@ export default {
 
   computed: {
     totalPrice() {
-      // add up all prices in the cart
       if (!Array.isArray(this.cart)) return 0;
 
       return this.cart.reduce((sum, item) => {

@@ -34,13 +34,8 @@
         @click="$emit('open-cart')"
         style="width: 80px; height: 80px; border-radius: 9999px; padding: 6px;"
       >
-        <!-- Cart Icon -->
         <i class="bi bi-cart2" style="font-size: 2.1rem;"></i>
-
-        <!-- Text under icon -->
         <span style="font-size: 0.95rem; margin-top: 3px;">Cart</span>
-
-        <!-- Red badge with item count -->
         <span
             v-if="cartCount > 0"
             class="badge rounded-pill bg-danger"
@@ -62,7 +57,6 @@ export default {
     cartCount() {
       if (!Array.isArray(this.cart)) return 0;
 
-      // sum all quantities in the cart
       return this.cart.reduce((sum, item) => {
         return sum + (item.quantity || 0);
       }, 0);
