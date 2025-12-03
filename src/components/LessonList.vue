@@ -122,7 +122,7 @@ export default {
         spaces: item.space,
         image: `${API_BASE_URL}/images/${item.topic
           .toLowerCase()
-          .replace(/\s+/g, "-")}.png`,
+          .replace(/\s+/g, "-")}.jpg`,
       }));
 
       console.log("Loaded lessons:", this.lessons.length);
@@ -142,7 +142,7 @@ export default {
           location: item.location,
           price: item.price,
           spaces: item.space,
-          image: `${API_BASE_URL}/images/${item.topic.toLowerCase().replace(/\s+/g, '-')}.png`,
+          image: `${API_BASE_URL}/images/${item.topic.toLowerCase().replace(/\s+/g, '-')}.jpg`,
         }));
         return;
       }
@@ -161,7 +161,7 @@ export default {
         spaces: item.space,
         image: `${API_BASE_URL}/images/${item.topic
           .toLowerCase()
-          .replace(/\s+/g, "-")}.png`,
+          .replace(/\s+/g, "-")}.jpg`,
         }));
         
         console.log("Search results:", this.lessons.length);
